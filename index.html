@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>International Economics Portfolio | Luise von Blumenthal</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&family=DM+Mono&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --ink:#0f0e0c;
+    --paper:#f5f0e8;
+    --cream:#ede7d5;
+    --gold:#b8952a;
+    --rust:#c4432a;
+    --rule:rgba(15,14,12,.12);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'DM Sans',sans-serif;
+}
+
+.hero{
+    min-height:80vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:4rem 2rem;
+}
+
+.kicker{
+    font-family:'DM Mono',monospace;
+    text-transform:uppercase;
+    letter-spacing:.25em;
+    color:var(--rust);
+    font-size:.8rem;
+    margin-bottom:1.5rem;
+}
+
+.hero h1{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(3rem,8vw,6rem);
+    line-height:1.05;
+    margin-bottom:1rem;
+}
+
+.hero h1 em{
+    color:var(--gold);
+    font-style:italic;
+}
+
+.hero p{
+    max-width:700px;
+    line-height:1.8;
+    color:rgba(15,14,12,.7);
+}
+
+.divider{
+    width:90%;
+    max-width:1200px;
+    margin:0 auto;
+    border-top:1px solid var(--rule);
+}
+
+.projects{
+    max-width:1200px;
+    margin:auto;
+    padding:6rem 2rem;
+}
+
+.section-label{
+    font-family:'DM Mono',monospace;
+    text-transform:uppercase;
+    letter-spacing:.2em;
+    color:var(--rust);
+    font-size:.7rem;
+    margin-bottom:3rem;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:2rem;
+}
+
+.card{
+    background:var(--cream);
+    border:1px solid var(--rule);
+    padding:2rem;
+    transition:.3s ease;
+    text-decoration:none;
+    color:inherit;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+.number{
+    font-family:'DM Mono',monospace;
+    color:var(--rust);
+    font-size:.75rem;
+    letter-spacing:.15em;
+    margin-bottom:1rem;
+}
+
+.card h2{
+    font-family:'Playfair Display',serif;
+    font-size:1.8rem;
+    margin-bottom:1rem;
+}
+
+.card h2 em{
+    color:var(--gold);
+    font-style:italic;
+}
+
+.card p{
+    line-height:1.7;
+    color:rgba(15,14,12,.7);
+}
+
+.footer{
+    text-align:center;
+    padding:4rem 2rem;
+    border-top:1px solid var(--rule);
+}
+
+.footer h3{
+    font-family:'Playfair Display',serif;
+    margin-bottom:.5rem;
+}
+
+.footer p{
+    color:rgba(15,14,12,.6);
+}
+
+@media(max-width:768px){
+    .hero{
+        min-height:60vh;
+    }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+    <div class="kicker">International Economics Portfolio</div>
+
+    <h1>
+        Luise von<br>
+        <em>Blumenthal</em>
+    </h1>
+
+    <p>
+        A collection of coursework, readings, simulations and economic analyses
+        exploring international trade, comparative advantage, trade policy,
+        protectionism, and the debate surrounding economic self-sufficiency.
+    </p>
+</section>
+
+<div class="divider"></div>
+
+<section class="projects">
+
+    <div class="section-label">
+        Course Projects
+    </div>
+
+    <div class="grid">
+
+        <a href="project1.html" class="card">
+            <div class="number">PROJECT 01</div>
+            <h2>Gravity <em>Model</em></h2>
+            <p>
+                Foundations of international economics and the Gravity Model of trade.
+                Includes an interactive calculator demonstrating how GDP and distance
+                influence trade flows.
+            </p>
+        </a>
+
+        <a href="project2.html" class="card">
+            <div class="number">PROJECT 02</div>
+            <h2>Comparative <em>Advantage</em></h2>
+            <p>
+                Exploring opportunity cost, specialization and Production Possibilities
+                Frontiers through interactive economic scenarios.
+            </p>
+        </a>
+
+        <a href="project3.html" class="card">
+            <div class="number">PROJECT 03</div>
+            <h2>Trade <em>Barriers</em></h2>
+            <p>
+                Tariffs, protectionism, and the economic consequences of trade
+                restrictions illustrated through historical examples and analysis.
+            </p>
+        </a>
+
+        <a href="project4.html" class="card">
+            <div class="number">PROJECT 04</div>
+            <h2>Trade <em>Policy</em></h2>
+            <p>
+                Government intervention in international trade through tariffs,
+                quotas, subsidies and other policy instruments.
+            </p>
+        </a>
+
+        <a href="project5.html" class="card">
+            <div class="number">PROJECT 05</div>
+            <h2>Autarky vs <em>Trade</em></h2>
+            <p>
+                A debate on economic self-sufficiency versus global trade
+                integration, exploring efficiency, resilience and national strategy.
+            </p>
+        </a>
+
+    </div>
+
+</section>
+
+<section class="footer">
+    <h3>International Economics</h3>
+    <p>
+        Portfolio showcasing coursework and applied economic analysis.
+    </p>
+</section>
+
+</body>
+</html>
