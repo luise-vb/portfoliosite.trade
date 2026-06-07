@@ -6,7 +6,6 @@
 <title>Project 1 — Gravity Model | Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
     --ink: #0f0e0c; --paper: #f5f0e8; --cream: #ede7d5;
@@ -60,36 +59,6 @@
   .theme-num { font-family: 'DM Mono', monospace; font-size: 2rem; color: var(--cream); position: absolute; top: .5rem; right: 1rem; line-height: 1; font-weight: 700; filter: brightness(.92); }
   .theme-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: .4rem; position: relative; }
   .theme-desc { font-size: .8rem; line-height: 1.6; color: rgba(15,14,12,.6); position: relative; }
-
-  /* GRAVITY CALCULATOR */
-  .demo-box { background: var(--cream); border: 1px solid var(--rule); padding: 2rem; }
-  .demo-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: .5rem; }
-  .demo-desc { font-size: .85rem; color: rgba(15,14,12,.6); margin-bottom: 2rem; line-height: 1.6; }
-  .formula-display {
-    font-family: 'DM Mono', monospace; font-size: 1.1rem;
-    background: var(--ink); color: var(--gold);
-    padding: 1rem 1.5rem; margin-bottom: 2rem; text-align: center;
-    letter-spacing: .05em;
-  }
-  .inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-  .input-group label {
-    display: block; font-family: 'DM Mono', monospace;
-    font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
-    color: var(--slate); margin-bottom: .4rem;
-  }
-  .input-group input[type=range] { width: 100%; accent-color: var(--rust); }
-  .input-group .val { font-family: 'DM Mono', monospace; font-size: .85rem; color: var(--rust); margin-top: .2rem; }
-  .gravity-result {
-    text-align: center; padding: 1.5rem;
-    background: var(--ink); color: var(--paper); margin-top: 1rem;
-  }
-  .gravity-result .result-num {
-    font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold);
-  }
-  .gravity-result .result-label { font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .12em; color: rgba(245,240,232,.5); text-transform: uppercase; margin-top: .3rem; }
-
-  /* CHART */
-  .chart-wrap { position: relative; height: 300px; margin-top: 1.5rem; }
 
   /* EVIDENCE */
   .evidence-note {
@@ -155,49 +124,9 @@
     </div>
   </section>
 
-  <!-- DEMO -->
-  <section class="section">
-    <p class="section-label">03 — Interactive Demonstration</p>
-    <h2>The Gravity Model Calculator</h2>
-    <div class="demo-box">
-      <p class="demo-title">Predict Trade Between Two Countries</p>
-      <p class="demo-desc">The Gravity Model says trade between two countries is proportional to the product of their GDPs and inversely proportional to the distance between them. Adjust the sliders to see how GDP and distance affect predicted trade volume.</p>
-      <div class="formula-display">Trade ∝ (GDP_A × GDP_B) / Distance²</div>
-      <div class="inputs-grid">
-        <div class="input-group">
-          <label>Country A — GDP (relative scale)</label>
-          <input type="range" id="gdpA" min="1" max="100" value="50">
-          <div class="val" id="gdpAVal">50</div>
-        </div>
-        <div class="input-group">
-          <label>Country B — GDP (relative scale)</label>
-          <input type="range" id="gdpB" min="1" max="100" value="50">
-          <div class="val" id="gdpBVal">50</div>
-        </div>
-        <div class="input-group">
-          <label>Distance (relative scale)</label>
-          <input type="range" id="dist" min="1" max="100" value="30">
-          <div class="val" id="distVal">30</div>
-        </div>
-        <div class="input-group">
-          <label>Cultural/Trade Agreement Bonus</label>
-          <input type="range" id="bonus" min="1" max="5" value="1" step=".5">
-          <div class="val" id="bonusVal">×1.0</div>
-        </div>
-      </div>
-      <div class="gravity-result">
-        <div class="result-num" id="tradeScore">—</div>
-        <div class="result-label">Predicted Trade Index</div>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="gravityChart"></canvas>
-      </div>
-    </div>
-  </section>
-
   <!-- EVIDENCE -->
   <section class="section">
-    <p class="section-label">04 — Evidence from My Work</p>
+    <p class="section-label">03 — Evidence from My Work</p>
     <h2>Notes from Reading 1</h2>
     <div class="evidence-note">
       <div class="ev-label">From my notes — Guiding Questions</div>
@@ -219,7 +148,7 @@
 
   <!-- LEARN -->
   <section class="section">
-    <p class="section-label">05 — What Did I Learn?</p>
+    <p class="section-label">04 — What Did I Learn?</p>
     <div class="learn-grid">
       <div class="learn-card">
         <div class="learn-label">Knowledge</div>
@@ -237,76 +166,5 @@
   </section>
 
 </main>
-
-<script>
-  const sliders = {
-    gdpA: document.getElementById('gdpA'),
-    gdpB: document.getElementById('gdpB'),
-    dist: document.getElementById('dist'),
-    bonus: document.getElementById('bonus'),
-  };
-  const vals = {
-    gdpA: document.getElementById('gdpAVal'),
-    gdpB: document.getElementById('gdpBVal'),
-    dist: document.getElementById('distVal'),
-    bonus: document.getElementById('bonusVal'),
-  };
-
-  let chart;
-
-  function calcGravity(a, b, d, bon) {
-    return Math.round((a * b * bon) / (d * d) * 10) / 10;
-  }
-
-  function update() {
-    const a = +sliders.gdpA.value, b = +sliders.gdpB.value;
-    const d = +sliders.dist.value, bon = +sliders.bonus.value;
-    vals.gdpA.textContent = a;
-    vals.gdpB.textContent = b;
-    vals.distVal.textContent = d;
-    vals.bonus.parentElement.querySelector('.val').textContent = '×' + bon.toFixed(1);
-
-    const score = calcGravity(a, b, d, bon);
-    document.getElementById('tradeScore').textContent = score.toFixed(1);
-
-    // chart: vary distance from 1 to 100
-    const labels = [10,20,30,40,50,60,70,80,90,100];
-    const data = labels.map(dist => calcGravity(a, b, dist, bon));
-    if (chart) {
-      chart.data.datasets[0].data = data;
-      chart.update('none');
-    }
-  }
-
-  Object.values(sliders).forEach(s => s.addEventListener('input', update));
-
-  const ctx = document.getElementById('gravityChart').getContext('2d');
-  chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: [10,20,30,40,50,60,70,80,90,100].map(d => 'Distance ' + d),
-      datasets: [{
-        label: 'Trade Index vs Distance',
-        data: [],
-        borderColor: '#c4432a',
-        backgroundColor: 'rgba(196,67,42,.1)',
-        fill: true,
-        tension: .4,
-        pointRadius: 3,
-        pointBackgroundColor: '#c4432a',
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { grid: { color: 'rgba(15,14,12,.06)' }, ticks: { font: { family: 'DM Mono', size: 10 }, maxRotation: 45 } },
-        y: { grid: { color: 'rgba(15,14,12,.06)' }, ticks: { font: { family: 'DM Mono', size: 10 } } }
-      }
-    }
-  });
-
-  update();
-</script>
 </body>
 </html>
