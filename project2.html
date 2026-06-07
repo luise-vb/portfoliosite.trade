@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 2 — Comparative Advantage | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c; --paper: #f5f0e8; --cream: #ede7d5;
+    --rust: #c4432a; --gold: #b8952a; --slate: #5a6b7a; --rule: rgba(15,14,12,0.12);
+    --sage: #4a6741;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem; background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule);
+  }
+  .nav-back { font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); text-decoration: none; }
+  .nav-back:hover { color: var(--rust); }
+  .nav-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-style: italic; }
+
+  .hero-band { background: var(--sage); color: var(--paper); padding: 5rem 3rem 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; }
+  .proj-num { font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .proj-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.1; }
+  .proj-title em { color: var(--gold); font-style: italic; }
+  .proj-sub { font-size: 1rem; line-height: 1.7; color: rgba(245,240,232,.65); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 4rem 3rem; }
+  .section { margin-bottom: 5rem; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--rust); margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; }
+  p { font-size: .95rem; line-height: 1.8; color: rgba(15,14,12,.8); margin-bottom: 1rem; }
+  p strong { color: var(--ink); font-weight: 500; }
+
+  /* COMPARISON TABLE */
+  .comp-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+  .comp-table th { background: var(--ink); color: var(--paper); font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; padding: .75rem 1rem; text-align: left; }
+  .comp-table td { padding: .75rem 1rem; border-bottom: 1px solid var(--rule); font-size: .9rem; }
+  .comp-table tr:nth-child(even) td { background: var(--cream); }
+  .comp-table .highlight { color: var(--rust); font-weight: 500; }
+
+  /* PPF DEMO */
+  .demo-box { background: var(--cream); border: 1px solid var(--rule); padding: 2rem; }
+  .demo-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: .5rem; }
+  .demo-desc { font-size: .85rem; color: rgba(15,14,12,.6); margin-bottom: 1.5rem; line-height: 1.6; }
+
+  .ppf-canvas-wrap { position: relative; display: flex; justify-content: center; }
+  canvas#ppfCanvas { background: white; border: 1px solid var(--rule); }
+
+  .ppf-controls { margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .slider-group label { display: block; font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); margin-bottom: .3rem; }
+  .slider-group input[type=range] { width: 100%; accent-color: var(--sage); }
+  .slider-group .val { font-family: 'DM Mono', monospace; font-size: .85rem; color: var(--sage); }
+
+  .ppf-insight { margin-top: 1.5rem; padding: 1rem 1.5rem; background: var(--ink); color: var(--paper); font-family: 'DM Mono', monospace; font-size: .82rem; line-height: 1.6; }
+  .ppf-insight span { color: var(--gold); }
+
+  /* SCENARIO EXPLORER */
+  .scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+  .scenario-btn {
+    padding: 1rem 1.25rem; border: 1px solid var(--rule); background: var(--cream);
+    cursor: pointer; text-align: left; transition: background .2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .scenario-btn:hover, .scenario-btn.active { background: var(--ink); color: var(--paper); }
+  .scenario-btn .s-title { font-weight: 500; font-size: .9rem; margin-bottom: .3rem; }
+  .scenario-btn .s-sub { font-size: .78rem; opacity: .65; }
+  .scenario-result { margin-top: 1.5rem; padding: 1.5rem; background: var(--ink); color: var(--paper); min-height: 100px; }
+  .scenario-result h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-style: italic; color: var(--gold); margin-bottom: .5rem; }
+  .scenario-result p { font-size: .88rem; line-height: 1.7; color: rgba(245,240,232,.8); margin: 0; }
+
+  .evidence-note { background: var(--cream); border-left: 3px solid var(--sage); padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .evidence-note .ev-label { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--slate); margin-bottom: .4rem; }
+  .evidence-note p { font-size: .88rem; margin: 0; }
+
+  .learn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+  .learn-card { padding: 1.5rem; border-top: 2px solid var(--sage); }
+  .learn-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--sage); margin-bottom: .5rem; }
+  .learn-text { font-size: .88rem; line-height: 1.7; }
+
+  @media (max-width: 768px) {
+    .hero-band { grid-template-columns: 1fr; padding: 4rem 1.5rem 3rem; }
+    main { padding: 3rem 1.5rem; }
+    .ppf-controls { grid-template-columns: 1fr; }
+    .scenario-grid { grid-template-columns: 1fr; }
+    .learn-grid { grid-template-columns: 1fr; }
+    canvas#ppfCanvas { width: 100% !important; height: auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html">← Portfolio</a>
+  <span class="nav-title">Project 02 — Comparative Advantage</span>
+</nav>
+
+<div class="hero-band">
+  <div>
+    <p class="proj-num">Project 02 / Reading 2 — Chapters 3–4</p>
+    <h1 class="proj-title">Comparative Advantage<br>&amp; the <em>PPF</em></h1>
+  </div>
+  <div>
+    <p class="proj-sub">The most counterintuitive insight in economics: even if one country is better at producing everything, both countries still gain from specialising and trading. The PPF makes this visible.</p>
+  </div>
+</div>
+
+<main>
+
+  <section class="section">
+    <p class="section-label">01 — Overview</p>
+    <h2>Why Even the Weakest Economy Deserves a Trade Partner</h2>
+    <p>This project comes from Reading 2 (Chapters 3–4), which introduced the concept of <strong>absolute vs. comparative advantage</strong> and the Production Possibilities Frontier. The central question was: how can a low-productivity country benefit from trade when a richer country does everything better?</p>
+    <p>The answer — comparative advantage — is one of the most powerful and non-obvious ideas in economics. It says what matters is not who is <em>best</em> at something, but who gives up the <em>least</em> to produce it. Countries should specialise in whatever they sacrifice least to make, then trade for the rest.</p>
+  </section>
+
+  <section class="section">
+    <p class="section-label">02 — Absolute vs Comparative</p>
+    <h2>Two Different Ways of Being "Better"</h2>
+    <p>The key distinction from my notes: <strong>Absolute advantage</strong> = who produces more (is more productive). <strong>Comparative advantage</strong> = who gives up less (has a lower opportunity cost). Trade is determined by comparative, not absolute advantage.</p>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Concept</th><th>Definition</th><th>Example</th><th>Determines Trade?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Absolute Advantage</strong></td><td>Who produces the same good more efficiently (more output per input)</td><td>Country A makes 10 cars/hr, Country B makes 6 cars/hr → A has absolute advantage</td><td class="highlight">No</td></tr>
+        <tr><td><strong>Comparative Advantage</strong></td><td>Who gives up less of other goods to produce one unit of a good (lower opportunity cost)</td><td>Country B gives up less wine per car than Country A → B has comp. adv. in cars</td><td class="highlight">Yes ✓</td></tr>
+        <tr><td><strong>Opportunity Cost</strong></td><td>What you forgo when you choose to produce one good over another</td><td>Making 1 car costs 2 bottles of wine → opp. cost of car = 2 wine</td><td>—</td></tr>
+        <tr><td><strong>Specialisation</strong></td><td>Each country focuses on its comparative advantage good</td><td>Country A makes only wine; Country B makes only cars; they trade</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <p class="section-label">03 — Interactive PPF Demonstration</p>
+    <h2>Explore the Production Possibilities Frontier</h2>
+    <div class="demo-box">
+      <p class="demo-title">PPF Explorer — Wine & Cheese</p>
+      <p class="demo-desc">A PPF shows all combinations a country can produce with its resources. Points on the curve = efficient. Inside = inefficient. Outside = impossible without trade. Adjust a country's productivity in each good and watch what happens.</p>
+
+      <div class="ppf-canvas-wrap">
+        <canvas id="ppfCanvas" width="480" height="360"></canvas>
+      </div>
+
+      <div class="ppf-controls">
+        <div class="slider-group">
+          <label>Country A — Wine Capacity</label>
+          <input type="range" id="awine" min="10" max="100" value="80">
+          <div class="val" id="awineVal">80 units</div>
+        </div>
+        <div class="slider-group">
+          <label>Country A — Cheese Capacity</label>
+          <input type="range" id="acheese" min="10" max="100" value="40">
+          <div class="val" id="acheeseVal">40 units</div>
+        </div>
+        <div class="slider-group">
+          <label>Country B — Wine Capacity</label>
+          <input type="range" id="bwine" min="10" max="100" value="30">
+          <div class="val" id="bwineVal">30 units</div>
+        </div>
+        <div class="slider-group">
+          <label>Country B — Cheese Capacity</label>
+          <input type="range" id="bcheese" min="10" max="100" value="60">
+          <div class="val" id="bcheeseVal">60 units</div>
+        </div>
+      </div>
+
+      <div class="ppf-insight" id="ppfInsight">
+        <span>Comparative Advantage:</span> Calculating...
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">03b — Scenario Explorer</p>
+    <h2>What Happens When…?</h2>
+    <div class="scenario-grid">
+      <button class="scenario-btn active" onclick="setScenario(0)"><div class="s-title">Both countries specialise & trade</div><div class="s-sub">The standard comp. adv. outcome</div></button>
+      <button class="scenario-btn" onclick="setScenario(1)"><div class="s-title">Identical opportunity costs</div><div class="s-sub">What if opp. costs are the same?</div></button>
+      <button class="scenario-btn" onclick="setScenario(2)"><div class="s-title">High transport costs</div><div class="s-sub">When does trade become unviable?</div></button>
+      <button class="scenario-btn" onclick="setScenario(3)"><div class="s-title">A country protects its industry</div><div class="s-sub">Tariffs vs. comparative advantage</div></button>
+    </div>
+    <div class="scenario-result" id="scenarioResult">
+      <h4>Trade through Specialisation</h4>
+      <p>Each country produces only the good where it has a comparative advantage — lowest opportunity cost. They then exchange. Both end up consuming beyond their own PPF. This is the core gain from trade: total output rises without any new resources.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">04 — Evidence</p>
+    <h2>Notes from Reading 2</h2>
+    <div class="evidence-note">
+      <div class="ev-label">From my notes — Main Concepts</div>
+      <p>Reading 2 (Ch. 3–4) covered Absolute vs. Comparative Advantage, Gains from Trade, and the PPF. The guiding questions asked me to distinguish the two types of advantage and explain how a low-productivity country still benefits.</p>
+    </div>
+    <div class="evidence-note">
+      <div class="ev-label">From my notes — PPF Interpretation</div>
+      <p>On the curve = efficient. Inside = inefficient (not using all resources). Outside = impossible without trade. A bowed-outward shape signals increasing opportunity costs — resources are not perfectly suited to both goods equally.</p>
+    </div>
+    <div class="evidence-note">
+      <div class="ev-label">From my notes — When it Fails</div>
+      <p>Comparative advantage breaks down when transport costs are too high, when countries protect their industries with tariffs, or when opportunity costs are identical (no basis for trade).</p>
+    </div>
+    <div class="evidence-note">
+      <div class="ev-label">From my notes — What the Assessment Will Test</div>
+      <p>Likely exam topics: distinguishing comparative vs. absolute advantage, calculating opportunity costs, and interpreting PPF graphs — which is exactly what the demonstration above practises.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">05 — What Did I Learn?</p>
+    <div class="learn-grid">
+      <div class="learn-card">
+        <div class="learn-label">Knowledge</div>
+        <p class="learn-text">Comparative advantage is determined solely by opportunity cost, not productivity levels. Even a country that is worse at producing everything absolutely still has a comparative advantage in whatever it gives up least to make.</p>
+      </div>
+      <div class="learn-card">
+        <div class="learn-label">Skills</div>
+        <p class="learn-text">I can now calculate opportunity costs from a production table and identify which country should export which good. I can also read a PPF diagram and explain what points inside, on, and outside it represent.</p>
+      </div>
+      <div class="learn-card">
+        <div class="learn-label">Reflection</div>
+        <p class="learn-text">This concept was the hardest to accept intuitively. My instinct was that the better producer always wins — but opportunity cost flips that logic entirely. Real-world trade policy often ignores comparative advantage, which explains why it generates so much inefficiency.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  const sliders = ['awine','acheese','bwine','bcheese'];
+  sliders.forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      document.getElementById(id + 'Val').textContent = el.value + ' units';
+      drawPPF();
+      updateInsight();
+    });
+  });
+
+  function drawPPF() {
+    const canvas = document.getElementById('ppfCanvas');
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    const pad = 50;
+
+    const aw = +document.getElementById('awine').value;
+    const ac = +document.getElementById('acheese').value;
+    const bw = +document.getElementById('bwine').value;
+    const bc = +document.getElementById('bcheese').value;
+
+    ctx.clearRect(0,0,w,h);
+
+    // background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0,0,w,h);
+
+    // axes
+    ctx.strokeStyle = '#0f0e0c';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(pad, pad); ctx.lineTo(pad, h-pad);
+    ctx.lineTo(w-pad, h-pad);
+    ctx.stroke();
+
+    // axis labels
+    ctx.fillStyle = '#5a6b7a';
+    ctx.font = '11px DM Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('Wine →', w/2, h-8);
+    ctx.save(); ctx.translate(12, h/2); ctx.rotate(-Math.PI/2);
+    ctx.fillText('Cheese →', 0, 0); ctx.restore();
+
+    const maxW = 110, maxC = 110;
+    const toX = v => pad + (v / maxW) * (w - pad*2);
+    const toY = v => (h-pad) - (v / maxC) * (h - pad*2);
+
+    // Country A PPF (line)
+    ctx.strokeStyle = '#c4432a';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(toX(0), toY(ac));
+    ctx.lineTo(toX(aw), toY(0));
+    ctx.stroke();
+    ctx.fillStyle = '#c4432a';
+    ctx.font = 'italic 12px Playfair Display, serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('Country A', toX(aw/2 + 5), toY(ac/2 - 3));
+
+    // Country B PPF (dashed)
+    ctx.strokeStyle = '#4a6741';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([6,4]);
+    ctx.beginPath();
+    ctx.moveTo(toX(0), toY(bc));
+    ctx.lineTo(toX(bw), toY(0));
+    ctx.stroke();
+    ctx.fillStyle = '#4a6741';
+    ctx.fillText('Country B', toX(bw/2 + 5), toY(bc/2 - 3));
+
+    ctx.setLineDash([]);
+  }
+
+  function updateInsight() {
+    const aw = +document.getElementById('awine').value;
+    const ac = +document.getElementById('acheese').value;
+    const bw = +document.getElementById('bwine').value;
+    const bc = +document.getElementById('bcheese').value;
+
+    // Opp cost of wine: how much cheese you give up per wine
+    const aOppWine = (ac / aw).toFixed(2); // cheese per wine for A
+    const bOppWine = (bc / bw).toFixed(2);
+
+    let advWine = +aOppWine < +bOppWine ? 'Country A' : 'Country B';
+    let advCheese = +aOppWine > +bOppWine ? 'Country A' : 'Country B';
+
+    const el = document.getElementById('ppfInsight');
+    if (aOppWine === bOppWine) {
+      el.innerHTML = `<span>No Comparative Advantage:</span> Both countries have identical opportunity costs (${aOppWine} cheese per wine). There is no basis for trade — specialisation would bring no gain.`;
+    } else {
+      el.innerHTML = `<span>Comparative Advantage:</span> ${advWine} should export Wine (lower opp. cost: ${Math.min(+aOppWine, +bOppWine)} cheese per wine). ${advCheese} should export Cheese. Both gain from trading.`;
+    }
+  }
+
+  const scenarios = [
+    { title: 'Trade through Specialisation', text: 'Each country produces only the good where it has a comparative advantage — lowest opportunity cost. They then exchange. Both end up consuming beyond their own PPF. This is the core gain from trade: total output rises without any new resources.' },
+    { title: 'Identical Opportunity Costs', text: 'If both countries give up exactly the same amount of cheese per unit of wine, there is no comparative advantage — and therefore no basis for trade. Neither gains from specialisation. This is a theoretical edge case, but it shows why opp. cost differences are the engine of trade.' },
+    { title: 'High Transport Costs', text: 'If it costs 3 cheese-units worth of effort to ship 1 unit of wine, the gains from trade can be wiped out. Comparative advantage is necessary but not sufficient — trade must also be physically cheap enough to be worthwhile. This is why the Gravity Model matters: distance raises transport costs.' },
+    { title: 'Tariffs vs Comparative Advantage', text: 'When a government imposes a tariff to protect a domestic industry, it is effectively telling its economy to produce something it is comparatively bad at. Producers gain, but consumers pay higher prices, and the total output of the economy falls below the PPF frontier.' }
+  ];
+
+  function setScenario(i) {
+    document.querySelectorAll('.scenario-btn').forEach((b,idx) => b.classList.toggle('active', idx===i));
+    const r = document.getElementById('scenarioResult');
+    r.innerHTML = `<h4>${scenarios[i].title}</h4><p>${scenarios[i].text}</p>`;
+  }
+
+  drawPPF();
+  updateInsight();
+</script>
+</body>
+</html>

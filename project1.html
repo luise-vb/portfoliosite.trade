@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 1 — Gravity Model | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --ink: #0f0e0c; --paper: #f5f0e8; --cream: #ede7d5;
+    --rust: #c4432a; --gold: #b8952a; --slate: #5a6b7a; --rule: rgba(15,14,12,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(245,240,232,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-back { font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); text-decoration: none; }
+  .nav-back:hover { color: var(--rust); }
+  .nav-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-style: italic; }
+
+  .hero-band {
+    background: var(--ink); color: var(--paper);
+    padding: 5rem 3rem 4rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    align-items: end;
+  }
+  .proj-num { font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--rust); margin-bottom: 1rem; }
+  .proj-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.1; }
+  .proj-title em { color: var(--gold); font-style: italic; }
+  .proj-sub { font-size: 1rem; line-height: 1.7; color: rgba(245,240,232,.6); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 4rem 3rem; }
+
+  .section { margin-bottom: 5rem; }
+  .section-label {
+    font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--rust); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; }
+  p { font-size: .95rem; line-height: 1.8; color: rgba(15,14,12,.8); margin-bottom: 1rem; }
+  p strong { color: var(--ink); font-weight: 500; }
+
+  /* THEMES GRID */
+  .themes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem; }
+  .theme-card {
+    padding: 1.5rem; border: 1px solid var(--rule); background: var(--cream);
+    position: relative; overflow: hidden;
+  }
+  .theme-num { font-family: 'DM Mono', monospace; font-size: 2rem; color: var(--cream); position: absolute; top: .5rem; right: 1rem; line-height: 1; font-weight: 700; filter: brightness(.92); }
+  .theme-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: .4rem; position: relative; }
+  .theme-desc { font-size: .8rem; line-height: 1.6; color: rgba(15,14,12,.6); position: relative; }
+
+  /* GRAVITY CALCULATOR */
+  .demo-box { background: var(--cream); border: 1px solid var(--rule); padding: 2rem; }
+  .demo-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: .5rem; }
+  .demo-desc { font-size: .85rem; color: rgba(15,14,12,.6); margin-bottom: 2rem; line-height: 1.6; }
+  .formula-display {
+    font-family: 'DM Mono', monospace; font-size: 1.1rem;
+    background: var(--ink); color: var(--gold);
+    padding: 1rem 1.5rem; margin-bottom: 2rem; text-align: center;
+    letter-spacing: .05em;
+  }
+  .inputs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .input-group label {
+    display: block; font-family: 'DM Mono', monospace;
+    font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--slate); margin-bottom: .4rem;
+  }
+  .input-group input[type=range] { width: 100%; accent-color: var(--rust); }
+  .input-group .val { font-family: 'DM Mono', monospace; font-size: .85rem; color: var(--rust); margin-top: .2rem; }
+  .gravity-result {
+    text-align: center; padding: 1.5rem;
+    background: var(--ink); color: var(--paper); margin-top: 1rem;
+  }
+  .gravity-result .result-num {
+    font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold);
+  }
+  .gravity-result .result-label { font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .12em; color: rgba(245,240,232,.5); text-transform: uppercase; margin-top: .3rem; }
+
+  /* CHART */
+  .chart-wrap { position: relative; height: 300px; margin-top: 1.5rem; }
+
+  /* EVIDENCE */
+  .evidence-note {
+    background: var(--cream); border-left: 3px solid var(--rust);
+    padding: 1.25rem 1.5rem; margin-bottom: 1rem;
+  }
+  .evidence-note .ev-label { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--slate); margin-bottom: .4rem; }
+  .evidence-note p { font-size: .88rem; margin: 0; }
+
+  .learn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+  .learn-card { padding: 1.5rem; border-top: 2px solid var(--rust); }
+  .learn-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--rust); margin-bottom: .5rem; }
+  .learn-text { font-size: .88rem; line-height: 1.7; }
+
+  @media (max-width: 768px) {
+    .hero-band { grid-template-columns: 1fr; padding: 4rem 1.5rem 3rem; }
+    main { padding: 3rem 1.5rem; }
+    .inputs-grid { grid-template-columns: 1fr; }
+    .learn-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html">← Portfolio</a>
+  <span class="nav-title">Project 01 — Gravity Model</span>
+</nav>
+
+<div class="hero-band">
+  <div>
+    <p class="proj-num">Project 01 / Reading 1 — Chapters 1–2</p>
+    <h1 class="proj-title">International Economics<br>&amp; the <em>Gravity Model</em></h1>
+  </div>
+  <div>
+    <p class="proj-sub">The opening reading introduced me to what international economics actually is — and gave me the Gravity Model as a first practical tool for predicting trade flows between countries.</p>
+  </div>
+</div>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <section class="section">
+    <p class="section-label">01 — Overview</p>
+    <h2>Why Nations Trade — and How We Predict It</h2>
+    <p>This project is based on the first reading of the course, which covered the foundations of international economics and introduced the seven recurring themes that structure the entire field. The key practical tool from this reading was the <strong>Gravity Model</strong> — a surprisingly simple formula that predicts how much two countries will trade with each other.</p>
+    <p>Understanding this model matters because it explains real-world trade patterns: why Germany trades more with France than with Vietnam, why size amplifies trade, and why distance — not just geographical but cultural and political — is a genuine barrier. It is used by governments to design trade policy and by economists to forecast the effects of agreements like Brexit.</p>
+  </section>
+
+  <!-- THEMES -->
+  <section class="section">
+    <p class="section-label">02 — The 7 Core Themes</p>
+    <h2>What International Economics Keeps Coming Back To</h2>
+    <p>From my notes, the reading identified seven recurring themes that appear across every chapter of international economics. These aren't isolated topics — they interlink constantly.</p>
+    <div class="themes-grid">
+      <div class="theme-card"><span class="theme-num">1</span><div class="theme-name">Gains from Trade</div><div class="theme-desc">Why mutual exchange creates more value than isolation.</div></div>
+      <div class="theme-card"><span class="theme-num">2</span><div class="theme-name">Pattern of Trade</div><div class="theme-desc">Which countries trade what, and why it changes over time.</div></div>
+      <div class="theme-card"><span class="theme-num">3</span><div class="theme-name">Protectionism</div><div class="theme-desc">When governments restrict trade — and who actually benefits.</div></div>
+      <div class="theme-card"><span class="theme-num">4</span><div class="theme-name">Balance of Payments</div><div class="theme-desc">How money flows between countries through trade and investment.</div></div>
+      <div class="theme-card"><span class="theme-num">5</span><div class="theme-name">Exchange Rates</div><div class="theme-desc">How currency values shift trade competitiveness.</div></div>
+      <div class="theme-card"><span class="theme-num">6</span><div class="theme-name">Int'l Policy Coordination</div><div class="theme-desc">Why countries must cooperate to solve economic problems.</div></div>
+      <div class="theme-card"><span class="theme-num">7</span><div class="theme-name">Int'l Capital Markets</div><div class="theme-desc">How global investment flows — and why they cause crises.</div></div>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section class="section">
+    <p class="section-label">03 — Interactive Demonstration</p>
+    <h2>The Gravity Model Calculator</h2>
+    <div class="demo-box">
+      <p class="demo-title">Predict Trade Between Two Countries</p>
+      <p class="demo-desc">The Gravity Model says trade between two countries is proportional to the product of their GDPs and inversely proportional to the distance between them. Adjust the sliders to see how GDP and distance affect predicted trade volume.</p>
+      <div class="formula-display">Trade ∝ (GDP_A × GDP_B) / Distance²</div>
+      <div class="inputs-grid">
+        <div class="input-group">
+          <label>Country A — GDP (relative scale)</label>
+          <input type="range" id="gdpA" min="1" max="100" value="50">
+          <div class="val" id="gdpAVal">50</div>
+        </div>
+        <div class="input-group">
+          <label>Country B — GDP (relative scale)</label>
+          <input type="range" id="gdpB" min="1" max="100" value="50">
+          <div class="val" id="gdpBVal">50</div>
+        </div>
+        <div class="input-group">
+          <label>Distance (relative scale)</label>
+          <input type="range" id="dist" min="1" max="100" value="30">
+          <div class="val" id="distVal">30</div>
+        </div>
+        <div class="input-group">
+          <label>Cultural/Trade Agreement Bonus</label>
+          <input type="range" id="bonus" min="1" max="5" value="1" step=".5">
+          <div class="val" id="bonusVal">×1.0</div>
+        </div>
+      </div>
+      <div class="gravity-result">
+        <div class="result-num" id="tradeScore">—</div>
+        <div class="result-label">Predicted Trade Index</div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="gravityChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVIDENCE -->
+  <section class="section">
+    <p class="section-label">04 — Evidence from My Work</p>
+    <h2>Notes from Reading 1</h2>
+    <div class="evidence-note">
+      <div class="ev-label">From my notes — Guiding Questions</div>
+      <p>I structured my reading around three questions: What are the 7 recurring themes? What factors does the Gravity Model use? How has the pattern of trade changed over time?</p>
+    </div>
+    <div class="evidence-note">
+      <div class="ev-label">From my notes — Gravity Model Formula</div>
+      <p>The model uses two inputs: the size of each economy (GDP) and the distance between them. Larger economies generate more trade; greater distance reduces it. The formula produces a "gravity score" used to benchmark actual trade flows.</p>
+    </div>
+    <div class="evidence-note">
+      <div class="ev-label">From my notes — Limitations</div>
+      <p>The Gravity Model fails when cultural ties aren't captured (e.g. Ireland–UK), when trade agreements exist, or when political conflicts override economic incentives. Distance alone doesn't explain everything.</p>
+    </div>
+    <div class="evidence-note">
+      <div class="ev-label">From my notes — Historical Shift</div>
+      <p>Trade has shifted from primary products (raw materials) toward manufactured goods, and more trade now occurs between distant countries as globalisation reduces effective distance through technology and logistics.</p>
+    </div>
+  </section>
+
+  <!-- LEARN -->
+  <section class="section">
+    <p class="section-label">05 — What Did I Learn?</p>
+    <div class="learn-grid">
+      <div class="learn-card">
+        <div class="learn-label">Knowledge</div>
+        <p class="learn-text">International economics differs from domestic economics because sovereign countries cannot be forced to cooperate. The seven themes frame every policy debate — from tariff design to exchange rate intervention.</p>
+      </div>
+      <div class="learn-card">
+        <div class="learn-label">Skills</div>
+        <p class="learn-text">I learned to read the Gravity Model as a diagnostic tool: if two large, nearby countries trade less than the model predicts, something — a political barrier, cultural mismatch, or historical tension — is suppressing natural trade.</p>
+      </div>
+      <div class="learn-card">
+        <div class="learn-label">Reflection</div>
+        <p class="learn-text">I was surprised that distance still matters so much in an age of the internet. The model reminded me that physical logistics, time zones, and cultural proximity remain very real costs even in globalised supply chains.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  const sliders = {
+    gdpA: document.getElementById('gdpA'),
+    gdpB: document.getElementById('gdpB'),
+    dist: document.getElementById('dist'),
+    bonus: document.getElementById('bonus'),
+  };
+  const vals = {
+    gdpA: document.getElementById('gdpAVal'),
+    gdpB: document.getElementById('gdpBVal'),
+    dist: document.getElementById('distVal'),
+    bonus: document.getElementById('bonusVal'),
+  };
+
+  let chart;
+
+  function calcGravity(a, b, d, bon) {
+    return Math.round((a * b * bon) / (d * d) * 10) / 10;
+  }
+
+  function update() {
+    const a = +sliders.gdpA.value, b = +sliders.gdpB.value;
+    const d = +sliders.dist.value, bon = +sliders.bonus.value;
+    vals.gdpA.textContent = a;
+    vals.gdpB.textContent = b;
+    vals.distVal.textContent = d;
+    vals.bonus.parentElement.querySelector('.val').textContent = '×' + bon.toFixed(1);
+
+    const score = calcGravity(a, b, d, bon);
+    document.getElementById('tradeScore').textContent = score.toFixed(1);
+
+    // chart: vary distance from 1 to 100
+    const labels = [10,20,30,40,50,60,70,80,90,100];
+    const data = labels.map(dist => calcGravity(a, b, dist, bon));
+    if (chart) {
+      chart.data.datasets[0].data = data;
+      chart.update('none');
+    }
+  }
+
+  Object.values(sliders).forEach(s => s.addEventListener('input', update));
+
+  const ctx = document.getElementById('gravityChart').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [10,20,30,40,50,60,70,80,90,100].map(d => 'Distance ' + d),
+      datasets: [{
+        label: 'Trade Index vs Distance',
+        data: [],
+        borderColor: '#c4432a',
+        backgroundColor: 'rgba(196,67,42,.1)',
+        fill: true,
+        tension: .4,
+        pointRadius: 3,
+        pointBackgroundColor: '#c4432a',
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: 'rgba(15,14,12,.06)' }, ticks: { font: { family: 'DM Mono', size: 10 }, maxRotation: 45 } },
+        y: { grid: { color: 'rgba(15,14,12,.06)' }, ticks: { font: { family: 'DM Mono', size: 10 } } }
+      }
+    }
+  });
+
+  update();
+</script>
+</body>
+</html>

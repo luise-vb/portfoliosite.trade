@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 5 — Autarky | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c; --paper: #f5f0e8; --cream: #ede7d5;
+    --rust: #c4432a; --gold: #b8952a; --slate: #5a6b7a; --rule: rgba(15,14,12,0.12);
+    --dark: #1a1208;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+
+  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 3rem; background: rgba(245,240,232,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+  .nav-back { font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); text-decoration: none; }
+  .nav-back:hover { color: var(--rust); }
+  .nav-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-style: italic; }
+
+  .hero-band {
+    background: var(--dark);
+    color: var(--paper); padding: 5rem 3rem 4rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end;
+    position: relative; overflow: hidden;
+  }
+  .hero-band::before {
+    content: 'vs';
+    position: absolute; right: 4rem; top: 50%; transform: translateY(-50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 12rem; font-style: italic;
+    color: rgba(184,149,42,.07); line-height: 1;
+  }
+  .proj-num { font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .proj-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.1; }
+  .proj-title em { color: var(--gold); font-style: italic; }
+  .proj-sub { font-size: 1rem; line-height: 1.7; color: rgba(245,240,232,.65); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 4rem 3rem; }
+  .section { margin-bottom: 5rem; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--rust); margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; }
+  p { font-size: .95rem; line-height: 1.8; color: rgba(15,14,12,.8); margin-bottom: 1rem; }
+
+  /* DEBATE COLUMNS */
+  .debate-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule); }
+  .debate-side { padding: 2rem; }
+  .debate-side.autarky { background: var(--dark); color: var(--paper); border-right: 1px solid rgba(245,240,232,.1); }
+  .debate-side.openness { background: var(--cream); }
+  .ds-header { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 1rem; }
+  .autarky .ds-header { color: var(--gold); }
+  .openness .ds-header { color: var(--rust); }
+  .ds-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 1.25rem; }
+  .autarky .ds-title { color: var(--paper); }
+  .argument { display: flex; gap: .75rem; margin-bottom: 1rem; }
+  .arg-bullet { font-size: 1rem; flex-shrink: 0; margin-top: .1rem; }
+  .autarky .arg-bullet { color: var(--gold); }
+  .openness .arg-bullet { color: var(--rust); }
+  .arg-text { font-size: .88rem; line-height: 1.7; }
+  .autarky .arg-text { color: rgba(245,240,232,.8); }
+
+  /* COUNTRY CASE STUDIES */
+  .cases-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .case-card { padding: 1.5rem; border: 1px solid var(--rule); background: var(--cream); }
+  .case-country { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: .25rem; }
+  .case-approach { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--slate); margin-bottom: .75rem; }
+  .case-result { font-size: .82rem; line-height: 1.65; }
+  .case-verdict { margin-top: .75rem; padding: .4rem .75rem; font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; display: inline-block; }
+  .verdict-bad { background: rgba(196,67,42,.15); color: var(--rust); }
+  .verdict-mixed { background: rgba(184,149,42,.15); color: var(--gold); }
+  .verdict-good { background: rgba(74,103,65,.15); color: #4a6741; }
+
+  /* DECISION TOOL */
+  .demo-box { background: var(--cream); border: 1px solid var(--rule); padding: 2rem; }
+  .demo-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: .5rem; }
+  .demo-desc { font-size: .85rem; color: rgba(15,14,12,.6); margin-bottom: 2rem; line-height: 1.6; }
+
+  .question-block { margin-bottom: 1.5rem; }
+  .q-text { font-size: .92rem; font-weight: 500; margin-bottom: .75rem; }
+  .q-options { display: flex; flex-direction: column; gap: .4rem; }
+  .q-option {
+    display: flex; align-items: center; gap: .75rem;
+    padding: .6rem 1rem; border: 1px solid var(--rule); background: white;
+    cursor: pointer; transition: background .15s;
+    font-size: .88rem;
+  }
+  .q-option:hover { background: var(--cream); }
+  .q-option input[type=radio] { accent-color: var(--rust); }
+
+  .calc-btn {
+    padding: .85rem 2rem; background: var(--dark); color: var(--paper);
+    border: none; cursor: pointer; font-family: 'DM Mono', monospace;
+    font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+    margin-top: 1rem; transition: opacity .2s;
+  }
+  .calc-btn:hover { opacity: .85; }
+
+  .result-panel { margin-top: 1.5rem; padding: 2rem; background: var(--ink); color: var(--paper); display: none; }
+  .result-panel.visible { display: block; }
+  .result-recommendation { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--gold); margin-bottom: 1rem; }
+  .result-explanation { font-size: .9rem; line-height: 1.75; color: rgba(245,240,232,.8); }
+
+  .evidence-note { background: var(--cream); border-left: 3px solid var(--dark); padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .evidence-note .ev-label { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--slate); margin-bottom: .4rem; }
+  .evidence-note p { font-size: .88rem; margin: 0; }
+
+  .learn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+  .learn-card { padding: 1.5rem; border-top: 2px solid var(--dark); }
+  .learn-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--dark); margin-bottom: .5rem; }
+  .learn-text { font-size: .88rem; line-height: 1.7; }
+
+  @media (max-width: 768px) {
+    .hero-band { grid-template-columns: 1fr; padding: 4rem 1.5rem 3rem; }
+    main { padding: 3rem 1.5rem; }
+    .debate-split { grid-template-columns: 1fr; }
+    .debate-side.autarky { border-right: none; border-bottom: 1px solid rgba(245,240,232,.1); }
+    .learn-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html">← Portfolio</a>
+  <span class="nav-title">Project 05 — Autarky</span>
+</nav>
+
+<div class="hero-band">
+  <div>
+    <p class="proj-num">Project 05 / Debate Activity</p>
+    <h1 class="proj-title"><em>Autarky</em><br>vs.<br>Trade Dependency</h1>
+  </div>
+  <div>
+    <p class="proj-sub">The autarky debate forced me to argue both sides of one of the oldest questions in international economics: is self-sufficiency a strength or a trap? The answer is deeply contextual — and that is exactly the point.</p>
+  </div>
+</div>
+
+<main>
+
+  <section class="section">
+    <p class="section-label">01 — Overview</p>
+    <h2>The Oldest Question in Trade Policy</h2>
+    <p>This project comes from a debate activity in which I engaged with AI (ChatGPT) to argue both sides of the autarky debate. <strong>Autarky</strong> means a policy of national economic self-sufficiency — producing everything domestically and minimising dependence on foreign trade. The opposite position — deep trade integration — maximises efficiency but creates strategic dependencies.</p>
+    <p>The assignment was particularly valuable because it forced me to build the strongest possible case for each side, rather than simply accepting the free-trade consensus of mainstream economics. The debate revealed that <strong>the right answer genuinely depends on what you are most afraid of</strong>: economic inefficiency, or strategic vulnerability.</p>
+  </section>
+
+  <section class="section">
+    <p class="section-label">02 — The Debate</p>
+    <h2>The Best Arguments on Each Side</h2>
+    <div class="debate-split">
+      <div class="debate-side autarky">
+        <div class="ds-header">The Case For Autarky</div>
+        <div class="ds-title">Self-Sufficiency as Strength</div>
+        <div class="argument"><span class="arg-bullet">◆</span><div class="arg-text"><strong style="color:var(--gold)">National Security:</strong> Dependence on foreign suppliers for critical goods — food, energy, pharmaceuticals, semiconductors — creates strategic vulnerabilities that can be weaponised by adversaries or disrupted by crises.</div></div>
+        <div class="argument"><span class="arg-bullet">◆</span><div class="arg-text"><strong style="color:var(--gold)">Supply Chain Resilience:</strong> COVID-19 demonstrated that globally integrated supply chains can collapse suddenly. Countries that maintained domestic production capacity were more resilient.</div></div>
+        <div class="argument"><span class="arg-bullet">◆</span><div class="arg-text"><strong style="color:var(--gold)">Industrial Policy:</strong> Domestic industries cannot develop if immediately undercut by cheaper foreign competition. Temporary protection allows infant industries to scale.</div></div>
+        <div class="argument"><span class="arg-bullet">◆</span><div class="arg-text"><strong style="color:var(--gold)">Employment:</strong> Offshoring production destroys domestic jobs and communities. The social cost of deindustrialisation is real even when aggregate GDP rises.</div></div>
+      </div>
+      <div class="debate-side openness">
+        <div class="ds-header">The Case For Trade Openness</div>
+        <div class="ds-title">Interdependence as Stability</div>
+        <div class="argument"><span class="arg-bullet">◈</span><div class="arg-text"><strong>Efficiency:</strong> Comparative advantage means countries produce at lower opportunity cost when they specialise. Autarky forces countries to produce goods they are bad at, permanently lowering living standards.</div></div>
+        <div class="argument"><span class="arg-bullet">◈</span><div class="arg-text"><strong>Peacekeeping:</strong> Countries that trade heavily with each other have strong economic incentives not to go to war. Economic interdependence is one of the most robust predictors of peace.</div></div>
+        <div class="argument"><span class="arg-bullet">◈</span><div class="arg-text"><strong>Innovation:</strong> Open economies access global knowledge, technology, and competition. Closed economies fall behind because they lack the spur of foreign competition and the scale of global markets.</div></div>
+        <div class="argument"><span class="arg-bullet">◈</span><div class="arg-text"><strong>Consumer Welfare:</strong> Protection raises prices. Autarky is a permanent tax on consumers, who pay more for everything to subsidise domestic producers.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">03 — Country Case Studies</p>
+    <h2>What History Shows</h2>
+    <div class="cases-grid">
+      <div class="case-card">
+        <div class="case-country">North Korea</div>
+        <div class="case-approach">Near-Total Autarky</div>
+        <div class="case-result">Extreme isolation has produced one of the world's poorest economies. Food insecurity is chronic. The regime survives but citizens bear enormous welfare costs.</div>
+        <span class="case-verdict verdict-bad">Outcome: Very Poor</span>
+      </div>
+      <div class="case-card">
+        <div class="case-country">India (1947–1991)</div>
+        <div class="case-approach">Import Substitution</div>
+        <div class="case-result">Protected heavy industry from foreign competition. Growth was slow and productivity lagged. The 1991 liberalisation triggered decades of rapid growth.</div>
+        <span class="case-verdict verdict-bad">Outcome: Below Potential</span>
+      </div>
+      <div class="case-card">
+        <div class="case-country">Singapore</div>
+        <div class="case-approach">Maximum Openness</div>
+        <div class="case-result">No natural resources, tiny domestic market. Became one of the wealthiest nations per capita by maximising trade openness and foreign investment.</div>
+        <span class="case-verdict verdict-good">Outcome: Excellent</span>
+      </div>
+      <div class="case-card">
+        <div class="case-country">USA (2018–)</div>
+        <div class="case-approach">Strategic Decoupling</div>
+        <div class="case-result">Selective protectionism in semiconductors, EVs, and strategic tech. Trade-off between efficiency loss and reduced dependency on adversarial suppliers. Ongoing experiment.</div>
+        <span class="case-verdict verdict-mixed">Outcome: Mixed</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">04 — Decision Tool</p>
+    <h2>Should Your Country Choose Autarky?</h2>
+    <div class="demo-box">
+      <p class="demo-title">Autarky Suitability Assessment</p>
+      <p class="demo-desc">Answer four questions about a hypothetical country's situation. Based on your answers, the tool recommends where on the autarky-openness spectrum the country should sit — and why.</p>
+
+      <div class="question-block">
+        <div class="q-text">1. How large and resource-rich is the country?</div>
+        <div class="q-options">
+          <label class="q-option"><input type="radio" name="q1" value="large"> Large country with diverse natural resources</label>
+          <label class="q-option"><input type="radio" name="q1" value="medium"> Medium-sized, some resources</label>
+          <label class="q-option"><input type="radio" name="q1" value="small"> Small or resource-poor</label>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-text">2. What is the geopolitical situation?</div>
+        <div class="q-options">
+          <label class="q-option"><input type="radio" name="q2" value="hostile"> Surrounded by adversaries / high conflict risk</label>
+          <label class="q-option"><input type="radio" name="q2" value="neutral"> Politically neutral / stable region</label>
+          <label class="q-option"><input type="radio" name="q2" value="allied"> Part of strong military and trade alliances</label>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-text">3. What is the primary policy goal?</div>
+        <div class="q-options">
+          <label class="q-option"><input type="radio" name="q3" value="security"> National security and strategic independence</label>
+          <label class="q-option"><input type="radio" name="q3" value="growth"> Economic growth and consumer welfare</label>
+          <label class="q-option"><input type="radio" name="q3" value="balance"> Balance of both</label>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="q-text">4. How developed is the domestic industrial base?</div>
+        <div class="q-options">
+          <label class="q-option"><input type="radio" name="q4" value="strong"> Strong — competitive with global producers</label>
+          <label class="q-option"><input type="radio" name="q4" value="developing"> Developing — infant industries need protection</label>
+          <label class="q-option"><input type="radio" name="q4" value="weak"> Weak — dependent on imports for most goods</label>
+        </div>
+      </div>
+
+      <button class="calc-btn" onclick="calculateResult()">Analyse →</button>
+
+      <div class="result-panel" id="resultPanel">
+        <div class="result-recommendation" id="resultTitle"></div>
+        <div class="result-explanation" id="resultText"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">05 — Evidence</p>
+    <h2>From the Debate Activity</h2>
+    <div class="evidence-note">
+      <div class="ev-label">Format of the Assignment</div>
+      <p>I used ChatGPT to simulate a structured debate, arguing both sides of the autarky question. The AI pushed back on weak arguments and forced me to strengthen each position with specific economic reasoning.</p>
+    </div>
+    <div class="evidence-note">
+      <div class="ev-label">My Key Insight from the Debate</div>
+      <p>The autarky debate has no clean answer because it depends on the threat model. If you fear economic stagnation, free trade wins. If you fear strategic vulnerability or war, some degree of self-sufficiency becomes rational. The debate showed me that economics cannot be separated from geopolitics.</p>
+    </div>
+    <div class="evidence-note">
+      <div class="ev-label">Connection to Course Concepts</div>
+      <p>The autarky debate connects directly to: comparative advantage (what you give up by not specialising), trade policy (which instruments achieve strategic goals), and the Gravity Model (autarky severs the geographic trade flows the model predicts). It served as an integrating exercise for the whole course.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">06 — What Did I Learn?</p>
+    <div class="learn-grid">
+      <div class="learn-card">
+        <div class="learn-label">Knowledge</div>
+        <p class="learn-text">Autarky has never produced prosperity when pursued as a permanent strategy. But selective strategic decoupling in critical sectors — semiconductors, food, energy — is a rational response to genuine security threats, as major economies are now discovering.</p>
+      </div>
+      <div class="learn-card">
+        <div class="learn-label">Skills</div>
+        <p class="learn-text">Debating both sides taught me to stress-test arguments. I can now identify when a free-trade argument ignores distributional concerns, and when a protectionist argument ignores efficiency costs. Good trade policy analysis requires holding both simultaneously.</p>
+      </div>
+      <div class="learn-card">
+        <div class="learn-label">Reflection</div>
+        <p class="learn-text">This was the most interesting project because it had no right answer. Economics gave me the efficiency argument; political science gave me the security argument; history gave me the evidence. I left the debate more uncertain than I started — but with a much richer framework for thinking about it.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  function calculateResult() {
+    const q1 = document.querySelector('input[name=q1]:checked')?.value;
+    const q2 = document.querySelector('input[name=q2]:checked')?.value;
+    const q3 = document.querySelector('input[name=q3]:checked')?.value;
+    const q4 = document.querySelector('input[name=q4]:checked')?.value;
+
+    if (!q1 || !q2 || !q3 || !q4) {
+      alert('Please answer all four questions.');
+      return;
+    }
+
+    let score = 0;
+    if (q1 === 'large') score += 2;
+    if (q1 === 'medium') score += 1;
+    if (q2 === 'hostile') score += 3;
+    if (q2 === 'neutral') score += 1;
+    if (q3 === 'security') score += 3;
+    if (q3 === 'balance') score += 1;
+    if (q4 === 'developing') score += 2;
+    if (q4 === 'strong') score -= 1;
+    if (q4 === 'weak') score += 1;
+
+    let title, text;
+    if (score <= 2) {
+      title = 'Recommendation: Deep Trade Openness';
+      text = 'This country has little to gain from autarky. It lacks the resource base to be self-sufficient, faces no acute security threats, and prioritises growth. Maximising trade openness — through agreements and low tariffs — will deliver the strongest outcomes. Any domestic industries that need temporary support should receive time-limited, targeted protection rather than permanent barriers.';
+    } else if (score <= 5) {
+      title = 'Recommendation: Selective Strategic Decoupling';
+      text = 'This country should maintain open trade broadly while identifying specific sectors with genuine strategic value — food, energy, critical technology — and building resilience there. Full autarky would be too costly, but zero strategic reserve capacity is too risky given the geopolitical context. This is the position most large democracies are actually moving toward.';
+    } else {
+      title = 'Recommendation: Significant Domestic Capacity Investment';
+      text = 'Given the security environment and resource base, this country has legitimate reasons to build substantial domestic production in critical sectors. However, full autarky remains unwise — even nations under severe pressure (like wartime economies) find ways to maintain some trade. The goal should be resilience, not isolation: reduce critical dependencies without cutting off the efficiency gains of international trade entirely.';
+    }
+
+    const panel = document.getElementById('resultPanel');
+    document.getElementById('resultTitle').textContent = title;
+    document.getElementById('resultText').textContent = text;
+    panel.classList.add('visible');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+</script>
+</body>
+</html>

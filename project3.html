@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 3 — Trade Barriers | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0c; --paper: #f5f0e8; --cream: #ede7d5;
+    --rust: #c4432a; --gold: #b8952a; --slate: #5a6b7a; --rule: rgba(15,14,12,0.12);
+    --burgundy: #7a2233;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+
+  nav { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 3rem; background: rgba(245,240,232,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+  .nav-back { font-family: 'DM Mono', monospace; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); text-decoration: none; }
+  .nav-back:hover { color: var(--rust); }
+  .nav-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-style: italic; }
+
+  .hero-band { background: var(--burgundy); color: var(--paper); padding: 5rem 3rem 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; }
+  .proj-num { font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .proj-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.1; }
+  .proj-title em { color: var(--gold); font-style: italic; }
+  .proj-sub { font-size: 1rem; line-height: 1.7; color: rgba(245,240,232,.65); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 4rem 3rem; }
+  .section { margin-bottom: 5rem; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--rust); margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+  h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; }
+  p { font-size: .95rem; line-height: 1.8; color: rgba(15,14,12,.8); margin-bottom: 1rem; }
+
+  /* STORY BLOCK */
+  .story-block {
+    background: var(--ink); color: var(--paper);
+    padding: 3rem; margin: 2rem 0;
+    position: relative; overflow: hidden;
+  }
+  .story-block::before {
+    content: '"';
+    position: absolute; top: -1rem; left: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 10rem; color: rgba(184,149,42,.15);
+    line-height: 1;
+  }
+  .story-year { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; }
+  .story-text { font-family: 'Playfair Display', serif; font-size: 1.1rem; line-height: 1.9; color: rgba(245,240,232,.9); position: relative; }
+  .story-text strong { color: var(--gold); font-style: italic; }
+  .story-moral { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(245,240,232,.15); font-family: 'DM Mono', monospace; font-size: .8rem; color: var(--gold); letter-spacing: .05em; }
+
+  /* TARIFF CALCULATOR */
+  .demo-box { background: var(--cream); border: 1px solid var(--rule); padding: 2rem; }
+  .demo-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: .5rem; }
+  .demo-desc { font-size: .85rem; color: rgba(15,14,12,.6); margin-bottom: 2rem; line-height: 1.6; }
+
+  .tariff-scenario { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+  .tariff-inputs .input-row { margin-bottom: 1.25rem; }
+  .tariff-inputs label { display: block; font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); margin-bottom: .3rem; }
+  .tariff-inputs input[type=range] { width: 100%; accent-color: var(--rust); }
+  .tariff-inputs .val { font-family: 'DM Mono', monospace; font-size: .85rem; color: var(--rust); }
+
+  .tariff-results { display: flex; flex-direction: column; gap: 1rem; }
+  .result-row { display: flex; justify-content: space-between; align-items: center; padding: .75rem 1rem; background: white; border-left: 3px solid var(--rule); }
+  .result-row.highlight { border-left-color: var(--rust); background: rgba(196,67,42,.06); }
+  .result-row .r-label { font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--slate); }
+  .result-row .r-val { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; }
+  .result-row.highlight .r-val { color: var(--rust); }
+
+  .tariff-verdict { margin-top: 1.5rem; padding: 1.25rem; background: var(--ink); color: var(--paper); font-size: .88rem; line-height: 1.7; }
+  .tariff-verdict strong { color: var(--gold); }
+
+  /* WINNER LOSER */
+  .wl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+  .wl-card { padding: 1.5rem; }
+  .wl-card.winner { background: rgba(74,103,65,.1); border-top: 3px solid #4a6741; }
+  .wl-card.loser { background: rgba(196,67,42,.08); border-top: 3px solid var(--rust); }
+  .wl-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; margin-bottom: .75rem; }
+  .winner .wl-label { color: #4a6741; }
+  .loser .wl-label { color: var(--rust); }
+  .wl-who { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: .5rem; }
+  .wl-why { font-size: .88rem; line-height: 1.7; }
+
+  .evidence-note { background: var(--cream); border-left: 3px solid var(--burgundy); padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .evidence-note .ev-label { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--slate); margin-bottom: .4rem; }
+  .evidence-note p { font-size: .88rem; margin: 0; }
+
+  .learn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
+  .learn-card { padding: 1.5rem; border-top: 2px solid var(--burgundy); }
+  .learn-label { font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--burgundy); margin-bottom: .5rem; }
+  .learn-text { font-size: .88rem; line-height: 1.7; }
+
+  @media (max-width: 768px) {
+    .hero-band { grid-template-columns: 1fr; padding: 4rem 1.5rem 3rem; }
+    main { padding: 3rem 1.5rem; }
+    .tariff-scenario { grid-template-columns: 1fr; }
+    .wl-grid { grid-template-columns: 1fr; }
+    .learn-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html">← Portfolio</a>
+  <span class="nav-title">Project 03 — Trade Barriers</span>
+</nav>
+
+<div class="hero-band">
+  <div>
+    <p class="proj-num">Project 03 / Tariff Analysis + Story of Trade</p>
+    <h1 class="proj-title">Trade Barriers<br>&amp; Why They<br><em>Backfire</em></h1>
+  </div>
+  <div>
+    <p class="proj-sub">A 52% Italian cotton tariff and a merchant's disastrous detour through 1608 Venice combine to tell the same story: protection always has a cost, and smuggling only makes it worse.</p>
+  </div>
+</div>
+
+<main>
+
+  <section class="section">
+    <p class="section-label">01 — Overview</p>
+    <h2>Two Sources, One Lesson</h2>
+    <p>This project combines two assignments: a <strong>tariff analysis</strong> (the "Ridiculous Tariff in Italy" document) and a <strong>creative writing exercise</strong> (Story of Trade: Venice 1608). Together they grounded the abstract concept of trade barriers in real, tangible consequences.</p>
+    <p>The Italy tariff assignment asked me to find and explain a historically absurd trade barrier and analyse why it existed. The story exercise asked me to narrate, in first person, the economic consequences of a tariff on a real merchant. Both assignments forced me to see trade barriers not as policy abstractions but as decisions with winners and losers.</p>
+  </section>
+
+  <section class="section">
+    <p class="section-label">02 — The Venice Story (My Assignment)</p>
+    <h2>Venice, 1608 — A Merchant's Misfortune</h2>
+
+    <div class="story-block">
+      <div class="story-year">Story of Trading · Venezia 1608</div>
+      <p class="story-text">
+        Since this story concerns trade, it only seemed right to set it in Venice. There was once a merchant who, returning from a year-long voyage, discovered that a <strong>tariff of 3 Lire</strong> had been imposed on his Indian spices to enter the city.<br><br>
+        Rather than pay, the furious merchant turned to his cousin: <em>"Let me through the back way, through another canal — no checkpoints."</em><br><br>
+        The unlucky merchant was caught anyway — and paid a fine of <strong>300 Lire</strong>... If only he had paid the original tariff.
+      </p>
+      <div class="story-moral">Moral: evading a trade barrier costs far more than complying with it — and barriers distort behaviour in unpredictable ways.</div>
+    </div>
+
+    <p>I wrote this story in Italian and set it in Venice deliberately — Venice was a major trading hub where tariffs and customs duties were a real part of daily commerce. The story captures how a small tariff (3 Lire) creates an incentive to evade, and how that evasion compounds the cost enormously (300 Lire fine). This illustrates a genuine economic phenomenon: <strong>tariffs create deadweight loss beyond just the tariff itself</strong> by distorting behaviour.</p>
+  </section>
+
+  <section class="section">
+    <p class="section-label">03 — The Italy Tariff Analysis</p>
+    <h2>52% on Cotton Textiles — Why Was It Ridiculous?</h2>
+    <p>For the tariff analysis assignment, I examined Italy's 52% tariff on printed cotton textiles. This was my analysis of why it existed — and why it was considered extreme even at the time.</p>
+
+    <div class="wl-grid">
+      <div class="wl-card winner">
+        <div class="wl-label">Winner</div>
+        <div class="wl-who">Italian Textile Producers</div>
+        <div class="wl-why">Protected from cheaper foreign competition. With a 52% tariff on imports, domestic producers could charge higher prices without losing customers. The tariff created an artificial competitive advantage.</div>
+      </div>
+      <div class="wl-card loser">
+        <div class="wl-label">Loser</div>
+        <div class="wl-who">Italian Consumers</div>
+        <div class="wl-why">Paid significantly more for cotton goods than the world market price. The tariff acted as a hidden tax redistributed from consumers to producers. Total economic efficiency fell.</div>
+      </div>
+    </div>
+
+    <p style="margin-top:1.5rem">My analysis noted that even in protectionist countries of the era, 40% was already considered high. The 52% rate was so extreme it raised the price of imported cotton goods to the point where domestic demand collapsed — meaning the protection ultimately hurt the very producers it was designed to help, because consumers bought less overall.</p>
+  </section>
+
+  <section class="section">
+    <p class="section-label">03b — Interactive Tariff Calculator</p>
+    <h2>See How a Tariff Redistributes Welfare</h2>
+    <div class="demo-box">
+      <p class="demo-title">Tariff Impact Simulator</p>
+      <p class="demo-desc">A tariff raises the domestic price of imported goods. It transfers money from consumers to producers and government, but creates a net loss (deadweight loss). Adjust the world price and tariff rate to see the effects.</p>
+      <div class="tariff-scenario">
+        <div class="tariff-inputs">
+          <div class="input-row">
+            <label>World (Import) Price — €</label>
+            <input type="range" id="worldPrice" min="10" max="100" value="40">
+            <div class="val" id="worldPriceVal">€40</div>
+          </div>
+          <div class="input-row">
+            <label>Tariff Rate — %</label>
+            <input type="range" id="tariffRate" min="0" max="100" value="52">
+            <div class="val" id="tariffRateVal">52%</div>
+          </div>
+          <div class="input-row">
+            <label>Domestic Demand (units)</label>
+            <input type="range" id="demand" min="50" max="500" value="200">
+            <div class="val" id="demandVal">200 units</div>
+          </div>
+        </div>
+        <div class="tariff-results" id="tariffResults"></div>
+      </div>
+      <div class="tariff-verdict" id="tariffVerdict"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">04 — Evidence</p>
+    <h2>From My Assignments</h2>
+    <div class="evidence-note">
+      <div class="ev-label">Tariff Analysis — Italy Cotton</div>
+      <p>Cotton goods tariff: 52% on printed textiles. Purpose: to protect local textile production — higher tariffs on imported textile reduces consumption of foreign imports. Even in protectionist countries, 40% was already considered high.</p>
+    </div>
+    <div class="evidence-note">
+      <div class="ev-label">Story of Trade — Venice 1608</div>
+      <p>Original story written in Italian. Setting: Venice (major historical trading hub). Plot: merchant discovers 3-Lira tariff on Indian spices, attempts to evade via back canal, is caught and fined 300 Lire. Key insight: evasion costs far exceed compliance costs.</p>
+    </div>
+    <div class="evidence-note">
+      <div class="ev-label">Why These Two Assignments Belong Together</div>
+      <p>The tariff analysis explains the theory — why barriers exist and who benefits. The Venice story shows the behavioural distortions — the incentive to evade creates additional economic damage beyond the tariff itself. Together they cover both the policy rationale and the human cost.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">05 — What Did I Learn?</p>
+    <div class="learn-grid">
+      <div class="learn-card">
+        <div class="learn-label">Knowledge</div>
+        <p class="learn-text">Tariffs protect producers at the expense of consumers and overall economic efficiency. The deadweight loss — the value destroyed by reduced trade — falls on no one specifically, which is why tariffs persist politically even when they damage aggregate welfare.</p>
+      </div>
+      <div class="learn-card">
+        <div class="learn-label">Skills</div>
+        <p class="learn-text">I can now decompose the effects of a tariff into: government revenue, producer gain, consumer loss, and deadweight loss. I can identify who lobbies for tariffs (producers) and who loses silently (consumers — dispersed and unorganised).</p>
+      </div>
+      <div class="learn-card">
+        <div class="learn-label">Reflection</div>
+        <p class="learn-text">The story exercise surprised me — writing fiction about economics forced me to internalise the concepts more deeply than any formula. The merchant's 300-Lire fine made "deadweight loss from evasion" concrete and unforgettable. Real-world tariff debates always feel different to me now.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  const inputs = ['worldPrice','tariffRate','demand'];
+  inputs.forEach(id => {
+    document.getElementById(id).addEventListener('input', updateTariff);
+  });
+
+  function updateTariff() {
+    const wp = +document.getElementById('worldPrice').value;
+    const tr = +document.getElementById('tariffRate').value;
+    const d = +document.getElementById('demand').value;
+
+    document.getElementById('worldPriceVal').textContent = '€' + wp;
+    document.getElementById('tariffRateVal').textContent = tr + '%';
+    document.getElementById('demandVal').textContent = d + ' units';
+
+    const dp = wp * (1 + tr/100); // domestic price with tariff
+    const tariffPerUnit = dp - wp;
+    const govRevenue = tariffPerUnit * d * 0.6;
+    const consumerLoss = tariffPerUnit * d;
+    const producerGain = tariffPerUnit * d * 0.35;
+    const deadweight = consumerLoss - govRevenue - producerGain;
+
+    document.getElementById('tariffResults').innerHTML = `
+      <div class="result-row"><span class="r-label">World Price</span><span class="r-val">€${wp}</span></div>
+      <div class="result-row highlight"><span class="r-label">Domestic Price (with tariff)</span><span class="r-val">€${dp.toFixed(0)}</span></div>
+      <div class="result-row"><span class="r-label">Tariff per Unit</span><span class="r-val">€${tariffPerUnit.toFixed(0)}</span></div>
+      <div class="result-row"><span class="r-label">Government Revenue</span><span class="r-val">€${govRevenue.toFixed(0)}</span></div>
+      <div class="result-row"><span class="r-label">Producer Gain</span><span class="r-val">€${producerGain.toFixed(0)}</span></div>
+      <div class="result-row highlight"><span class="r-label">Deadweight Loss (wasted)</span><span class="r-val">€${deadweight.toFixed(0)}</span></div>
+    `;
+
+    let verdict = '';
+    if (tr === 0) verdict = '<strong>No tariff:</strong> Free trade. Consumers pay world price. No deadweight loss. Producers earn less but the economy is most efficient.';
+    else if (tr < 20) verdict = `<strong>Moderate tariff (${tr}%):</strong> Some protection for producers. Government gains revenue. Consumer prices rise slightly. Deadweight loss is manageable.`;
+    else if (tr < 50) verdict = `<strong>High tariff (${tr}%):</strong> Significant consumer price increase. Government revenue rises but deadweight loss grows fast. Similar to protectionist Italy.`;
+    else verdict = `<strong>Extreme tariff (${tr}% — like Italy's cotton tariff):</strong> Consumer price is €${dp.toFixed(0)} vs world price of €${wp}. Deadweight loss of €${deadweight.toFixed(0)} is value simply destroyed. Demand collapses, imports fall, but so does consumer welfare dramatically.`;
+
+    document.getElementById('tariffVerdict').innerHTML = verdict;
+  }
+
+  updateTariff();
+</script>
+</body>
+</html>
